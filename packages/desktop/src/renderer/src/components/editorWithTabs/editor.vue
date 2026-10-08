@@ -196,6 +196,9 @@ const {
   texMathGfm,
   texMathSingleBackslash,
   texMathDoubleBackslash,
+  highlightSyntax,
+  inlineDiff,
+  multilineBlockquote,
   isHtmlEnabled,
   softNewlineAsSpace,
   lineHeight,
@@ -564,22 +567,25 @@ watch(frontmatterType, (value, oldValue) => {
   }
 })
 
+// `setOptions(..., true)` re-renders headings in place without emitting
+// `json-change`, so nothing else refreshes the outline after a toggle.
+const applyOutlineAffectingOption = (options: Partial<IMuyaOptions>): void => {
+  const muya = editor.value
+  if (!muya) return
+  muya.setOptions(options, true)
+  editorStore.REFRESH_TOC(muya.getTOC())
+}
+
 watch(superSubScript, (value, oldValue) => {
-  if (value !== oldValue && editor.value) {
-    editor.value.setOptions({ superSubScript: value }, true)
-  }
+  if (value !== oldValue) applyOutlineAffectingOption({ superSubScript: value })
 })
 
 watch(footnote, (value, oldValue) => {
-  if (value !== oldValue && editor.value) {
-    editor.value.setOptions({ footnote: value }, true)
-  }
+  if (value !== oldValue) applyOutlineAffectingOption({ footnote: value })
 })
 
 watch(texMathDollars, (value, oldValue) => {
-  if (value !== oldValue && editor.value) {
-    editor.value.setOptions({ texMathDollars: value }, true)
-  }
+  if (value !== oldValue) applyOutlineAffectingOption({ texMathDollars: value })
 })
 
 watch(isHtmlEnabled, (value, oldValue) => {
@@ -589,21 +595,27 @@ watch(isHtmlEnabled, (value, oldValue) => {
 })
 
 watch(texMathGfm, (value, oldValue) => {
-  if (value !== oldValue && editor.value) {
-    editor.value.setOptions({ texMathGfm: value }, true)
-  }
+  if (value !== oldValue) applyOutlineAffectingOption({ texMathGfm: value })
 })
 
 watch(texMathSingleBackslash, (value, oldValue) => {
-  if (value !== oldValue && editor.value) {
-    editor.value.setOptions({ texMathSingleBackslash: value }, true)
-  }
+  if (value !== oldValue) applyOutlineAffectingOption({ texMathSingleBackslash: value })
 })
 
 watch(texMathDoubleBackslash, (value, oldValue) => {
-  if (value !== oldValue && editor.value) {
-    editor.value.setOptions({ texMathDoubleBackslash: value }, true)
-  }
+  if (value !== oldValue) applyOutlineAffectingOption({ texMathDoubleBackslash: value })
+})
+
+watch(highlightSyntax, (value, oldValue) => {
+  if (value !== oldValue) applyOutlineAffectingOption({ highlightSyntax: value })
+})
+
+watch(inlineDiff, (value, oldValue) => {
+  if (value !== oldValue) applyOutlineAffectingOption({ inlineDiff: value })
+})
+
+watch(multilineBlockquote, (value, oldValue) => {
+  if (value !== oldValue) applyOutlineAffectingOption({ multilineBlockquote: value })
 })
 
 watch(softNewlineAsSpace, (value, oldValue) => {
@@ -1125,6 +1137,12 @@ const handReplace = (payload: unknown) => {
   editorStore.SEARCH(toSearchMatches(editor.value.replace(value, opt)))
 }
 
+const handleFindAction = (action: unknown) => {
+  if (!editor.value) return
+  editorStore.SEARCH(toSearchMatches(editor.value.find(action as 'previous' | 'next')))
+  scrollToHighlight()
+}
+
 const handleUploadedImage = (url: unknown, deletionUrl?: unknown) => {
   insertImage(url)
   editorStore.SHOW_IMAGE_DELETION_URL(deletionUrl as string)
@@ -1263,12 +1281,6 @@ const scrollToAnchorElement = (element: unknown) => {
 const scrollToElement = (selector: string) => {
   // Scroll to search highlight word
   scrollElementIntoView(document.querySelector(selector))
-}
-
-const handleFindAction = (action: unknown) => {
-  if (!editor.value) return
-  editorStore.SEARCH(toSearchMatches(editor.value.find(action as Parameters<Muya['find']>[0])))
-  scrollToHighlight()
 }
 
 interface ExportOptions {
@@ -1448,7 +1460,7 @@ const handleParagraph = (type: unknown) => {
         return editor.value.deleteParagraph()
       }
       default:
-        console.error(`unknow paragraph edit type: ${type}`)
+        console.error(`unknown paragraph edit type: ${type}`)
     }
   }
 }
@@ -1696,10 +1708,10 @@ const handleResetPaddingBottom = () => {
   if (!container) return
   const firstChild = container.firstElementChild as HTMLElement | null
   if (!firstChild) return
-  const newScollableHeightWithoutPadding =
+  const newScrollableHeightWithoutPadding =
     container.scrollHeight - container.clientHeight - parseFloat(firstChild.style.paddingBottom)
 
-  if (currentFile.value && newScollableHeightWithoutPadding > currentFile.value.scrollTop) {
+  if (currentFile.value && newScrollableHeightWithoutPadding > currentFile.value.scrollTop) {
     container.style.paddingBottom = ''
     resizeObserverForEditor.unobserve(firstChild) // unobserve #ag-editor-id since we have removed the padding
   }
@@ -1775,6 +1787,9 @@ onMounted(() => {
     texMathGfm: texMathGfm.value,
     texMathSingleBackslash: texMathSingleBackslash.value,
     texMathDoubleBackslash: texMathDoubleBackslash.value,
+    highlightSyntax: highlightSyntax.value,
+    inlineDiff: inlineDiff.value,
+    multilineBlockquote: multilineBlockquote.value,
     disableHtml: !isHtmlEnabled.value,
     softNewlineAsSpace: softNewlineAsSpace.value,
     hideQuickInsertHint: hideQuickInsertHint.value,
@@ -1945,6 +1960,13 @@ onMounted(() => {
 
   editor.value.on('preview-image', ({ data }: { data: string }) => {
     mediaViewer.value?.openImage(data)
+  })
+
+  // A preference toggle can change the result set under an open find bar; its
+  // count/index come from a snapshot the search handlers own.
+  editor.value.on('search-refreshed', (result: unknown) => {
+    editorStore.SEARCH(toSearchMatches(result))
+    scrollToHighlight()
   })
 
   editor.value.on('preview-diagram', (payload: IPreviewDiagramPayload) => {

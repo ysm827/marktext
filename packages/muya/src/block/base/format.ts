@@ -120,6 +120,10 @@ function getOffset(offset: number, token: Token) {
 
         case 'inline_code':
 
+        case 'mark':
+
+        case 'inline_diff':
+
         case 'inline_math': {
             const markerLen = token.marker.length;
             return markeredOffset(dis, len, markerLen, markerLen);
@@ -152,6 +156,26 @@ function clearFormat(token: Token, cursor: IContentCursor) {
 
         case 'em':
 
+        case 'mark': {
+            const { parent, children, backlash } = token;
+            const index = parent.indexOf(token);
+            const replacement: Token[] = [...(children as Token[])];
+
+            if (backlash) {
+                replacement.push({
+                    type: 'text',
+                    raw: backlash,
+                    content: backlash,
+                    parent,
+                    range: token.range,
+                });
+            }
+
+            parent.splice(index, 1, ...replacement);
+
+            break;
+        }
+
         case 'link':
 
         case 'html_tag': {
@@ -181,7 +205,9 @@ function clearFormat(token: Token, cursor: IContentCursor) {
 
         case 'inline_math':
 
-        case 'inline_code': {
+        case 'inline_code':
+
+        case 'inline_diff': {
             const { parent, range } = token;
             const index = parent.indexOf(token);
             const newToken: TextToken = {
@@ -708,6 +734,11 @@ class Format extends Content {
 
     private _convertIfNeeded() {
         const { text } = this;
+        // A run of `>` with nothing else is the prefix of a GitLab `>>>` fence,
+        // so hold off promoting it to a blockquote until the user types more
+        // (a space, or the rest of the quote).
+        const pendingFence
+            = this.muya.options.multilineBlockquote && /^ {0,3}>+$/.test(text);
 
         const [
             match,
@@ -747,7 +778,7 @@ class Format extends Content {
                 this._convertToSetextHeading(setextHeading);
                 break;
 
-            case !!blockquote:
+            case !!blockquote && !pendingFence:
                 this._convertToBlockQuote();
                 break;
 
@@ -1363,11 +1394,11 @@ class Format extends Content {
 
         // fix: #897 in marktext repo
         const { text } = this;
-        const { footnote, superSubScript, texMathDollars, texMathGfm, texMathSingleBackslash, texMathDoubleBackslash } = this.muya.options;
+        const { footnote, superSubScript, texMathDollars, texMathGfm, texMathSingleBackslash, texMathDoubleBackslash, highlightSyntax, inlineDiff } = this.muya.options;
         const { labels } = this.inlineRenderer;
         const tokens = tokenizer(text, {
             labels,
-            options: { footnote, superSubScript, texMathDollars, texMathGfm, texMathSingleBackslash, texMathDoubleBackslash },
+            options: { footnote, superSubScript, texMathDollars, texMathGfm, texMathSingleBackslash, texMathDoubleBackslash, highlightSyntax, inlineDiff },
         });
         // The caret offset is unreliable when it is parked on a
         // `contenteditable=false` inline image; resolve the real offset from the
