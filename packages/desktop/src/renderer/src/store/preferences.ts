@@ -37,6 +37,7 @@ export interface PreferencesState {
   lastOpenedFolder: string
   treePathExcludePatterns: string[]
   language: string
+  showPandocConvert: boolean
 
   // ----- Editor / typography -----
   editorFontFamily: string
@@ -107,6 +108,7 @@ export interface PreferencesState {
   tabBarVisibility: boolean
   sourceCodeModeEnabled: boolean
   openedFilesInSidebar: boolean
+  autoRevealInSidebar: boolean
 
   // ----- Search -----
   searchExclusions: string[]
@@ -163,6 +165,7 @@ export const usePreferencesStore = defineStore('preferences', {
     lastOpenedFolder: '',
     treePathExcludePatterns: [],
     language: 'en',
+    showPandocConvert: false,
 
     editorFontFamily: 'Open Sans',
     fontSize: 16,
@@ -229,6 +232,7 @@ export const usePreferencesStore = defineStore('preferences', {
     tabBarVisibility: false,
     sourceCodeModeEnabled: false,
     openedFilesInSidebar: true,
+    autoRevealInSidebar: true,
 
     searchExclusions: [],
     searchMaxFileSize: '',

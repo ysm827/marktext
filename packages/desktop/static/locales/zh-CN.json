@@ -213,7 +213,8 @@
       "closeAllTabs": "关闭所有标签页",
       "rename": "重命名",
       "copyPath": "复制路径",
-      "showInFolder": "在文件夹中显示"
+      "showInFolder": "在文件夹中显示",
+      "showInSideBar": "在侧边栏中显示"
     }
   },
   "search": {
@@ -437,7 +438,8 @@
         "imageRelativeDirectoryBase": "相对图片的复制位置",
         "imageRelativeDirectoryName": "相对图片文件夹名称",
         "fileSortOrder": "打开文件夹中文件的排序顺序：升序或降序",
-        "openedFilesInSidebar": "是否在侧边栏中显示已打开文件"
+        "openedFilesInSidebar": "是否在侧边栏中显示已打开文件",
+        "showPandocConvert": "显示 Pandoc 转换菜单。需要先安装 Pandoc。"
       }
     },
     "categories": {
@@ -481,10 +483,19 @@
         "selectFolder": "选择文件夹",
         "openBlankPage": "打开空白页"
       },
+      "pandoc": {
+        "title": "Pandoc 转换",
+        "description": "显示 Pandoc 转换菜单",
+        "detailedDescription": "需要先安装 Pandoc",
+        "found": "已找到：{path}",
+        "notFound": "未找到",
+        "recheck": "重新检测"
+      },
       "sidebar": {
         "title": "侧边栏",
         "wrapTextInToc": "在目录中换行文本",
         "showOpenedFiles": "显示已打开文件",
+        "autoReveal": "在侧边栏中定位当前文件",
         "excludePatterns": "排除模式",
         "excludePatternsNotes": "排除模式（注释）",
         "fileSortBy": {
@@ -782,6 +793,7 @@
       "quit": "退出",
       "toggleAutoSave": "切换自动保存",
       "importFile": "导入文件",
+      "revealInSideBar": "在侧边栏中显示",
       "exportFile": "导出文件",
       "exportFilePdf": "导出为 PDF",
       "zoom": "缩放",

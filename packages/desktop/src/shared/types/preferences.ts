@@ -26,6 +26,8 @@ export interface IUserPreferences {
   codeFontFamily?: string
   hideQuickInsertHint?: boolean
   hideLinkPopup?: boolean
+  openedFilesInSidebar?: boolean
+  autoRevealInSidebar?: boolean
   autoPairBracket?: boolean
   autoPairMarkdownSyntax?: boolean
   autoPairQuote?: boolean
@@ -75,6 +77,7 @@ export interface IUserPreferences {
   autoNormalizeLineEndings?: boolean
   watcherUsePolling?: boolean
   treePathExcludePatterns?: string[]
+  showPandocConvert?: boolean
   [key: string]: unknown
 }
 

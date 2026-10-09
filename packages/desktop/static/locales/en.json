@@ -213,7 +213,8 @@
       "closeAllTabs": "Close all tabs",
       "rename": "Rename",
       "copyPath": "Copy path",
-      "showInFolder": "Show in folder"
+      "showInFolder": "Show in folder",
+      "showInSideBar": "Show in Side Bar"
     }
   },
   "search": {
@@ -437,7 +438,8 @@
         "imageRelativeDirectoryName": "The relative image folder name",
         "autoNormalizeLineEndings": "Automatically normalize line endings when opening files. When disabled, files are opened as-is.",
         "fileSortOrder": "Sort order for files in opened folders: ascending or descending.",
-        "openedFilesInSidebar": "Whether to show opened files in the sidebar."
+        "openedFilesInSidebar": "Whether to show opened files in the sidebar.",
+        "showPandocConvert": "Show the Pandoc conversion menu. Requires Pandoc to be installed."
       }
     },
     "categories": {
@@ -481,10 +483,19 @@
         "selectFolder": "Select Folder",
         "openBlankPage": "Open blank page"
       },
+      "pandoc": {
+        "title": "Pandoc Conversion",
+        "description": "Show the Pandoc conversion menu",
+        "detailedDescription": "Requires Pandoc to be installed",
+        "found": "Found: {path}",
+        "notFound": "Not found",
+        "recheck": "Re-check"
+      },
       "sidebar": {
         "title": "Sidebar",
         "wrapTextInToc": "Wrap text in table of contents",
         "showOpenedFiles": "Show opened files",
+        "autoReveal": "Reveal the active file in the sidebar",
         "excludePatterns": "Exclude patterns",
         "excludePatternsNotes": "Exclude patterns (Notes)",
         "fileSortBy": {
@@ -783,6 +794,7 @@
       "quit": "Quit",
       "toggleAutoSave": "Toggle Auto Save",
       "importFile": "Import File",
+      "revealInSideBar": "Show in Side Bar",
       "exportFile": "Export File",
       "exportFilePdf": "Export as PDF",
       "zoom": "Zoom",

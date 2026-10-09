@@ -79,6 +79,8 @@
   "tabBarVisibility": false,
   "sourceCodeModeEnabled": false,
   "openedFilesInSidebar": true,
+  "autoRevealInSidebar": true,
+  "showPandocConvert": false,
 
   "searchExclusions": [],
   "searchMaxFileSize": "",

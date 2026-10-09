@@ -213,7 +213,8 @@
       "closeAllTabs": "關閉所有標籤頁",
       "rename": "重新命名",
       "copyPath": "複製路徑",
-      "showInFolder": "在資料夾中顯示"
+      "showInFolder": "在資料夾中顯示",
+      "showInSideBar": "在側邊欄中顯示"
     }
   },
   "search": {
@@ -437,7 +438,8 @@
         "imageRelativeDirectoryBase": "相對圖片的複製位置",
         "imageRelativeDirectoryName": "相對圖片資料夾名稱",
         "fileSortOrder": "開啟資料夾中檔案的排序順序：遞增或遞減",
-        "openedFilesInSidebar": "是否在側邊欄中顯示已開啟的檔案"
+        "openedFilesInSidebar": "是否在側邊欄中顯示已開啟的檔案",
+        "showPandocConvert": "顯示 Pandoc 轉換選單。需要先安裝 Pandoc。"
       }
     },
     "categories": {
@@ -481,10 +483,19 @@
         "selectFolder": "選擇資料夾",
         "openBlankPage": "開啟空白頁面"
       },
+      "pandoc": {
+        "title": "Pandoc 轉換",
+        "description": "顯示 Pandoc 轉換選單",
+        "detailedDescription": "需要先安裝 Pandoc",
+        "found": "已找到：{path}",
+        "notFound": "未找到",
+        "recheck": "重新檢測"
+      },
       "sidebar": {
         "title": "側邊欄",
         "wrapTextInToc": "在目錄中換行文字",
         "showOpenedFiles": "顯示已開啟的檔案",
+        "autoReveal": "在側邊欄中定位目前檔案",
         "excludePatterns": "排除模式",
         "excludePatternsNotes": "排除模式（備註）",
         "fileSortBy": {
@@ -783,6 +794,7 @@
       "quit": "退出",
       "toggleAutoSave": "切換自動儲存",
       "importFile": "匯入檔案",
+      "revealInSideBar": "在側邊欄中顯示",
       "exportFile": "匯出檔案",
       "exportFilePdf": "匯出為 PDF",
       "zoom": "縮放",
